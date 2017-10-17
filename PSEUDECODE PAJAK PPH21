@@ -1,0 +1,115 @@
+PSEUDECODE PAJAK PPH21
+TULIS dan SIMPAN 'gajiPokok' TIPE DATA number
+TULIS dan SIMPAN 'tunjangan' TIPE DATA number
+TULIS dan SIMPAN 'jkk' TIPE DATA boolean
+TULIS dan SIMPAN 'jk' TIPE DATA boolean
+TULIS dan SIMPAN 'bulanTahunMasuk' TIPE DATA string
+FUNCTION 'ceil' dengan 2 parameter bernama 'num' dan 'percent'
+	HITUNG 'ceil' dari metode MATH.ceil 'num' dikali 'percent'
+	return 'ceil'
+END FUNCTION
+FUNCTION 'currencyIDR' dengan 1 parameter bernama 'num'
+	TULIS 'convert' dan ISI dengan metode toLocaleString('id') dari parameter 'num'
+	tulis 'currency' dan ISI dengan "Rp. : 'convert' ,00"
+	return 'currency'
+END FUNCTION
+
+TULIS 'today' dan ISI dengan new Date()
+TULIS 'ArrMasuk' dan ISI dengan metode split()dengan parameter 'spasi' dari variable 'bulanTahunMasuk'
+TULIS 'monthNow' dan isi dengan metode getMonth() di tambah 1 dari variable 'today'
+TULIS 'yearNow' dan isi dengan metode getFullYear() dari variable 'today'
+TULIS 'yearMasuk' dan isi dengan metode Number dengan parameter Array ArrMasuk[1]
+SWITCH dari nilai array 'ArrMasuk[0]' dengan metode toLowerCase
+	case 'januari': namabulan=1; break;
+    case 'februari': namabulan=2; break;
+    case 'maret': namabulan=3; break;
+    case 'april': namabulan=4; break;
+    case 'mei': namabulan=5; break;
+    case 'juni': namabulan=6; break;
+    case 'juli': namabulan=7; break;
+    case 'agustus': namabulan=8; break;
+    case 'september': namabulan=9; break;
+    case 'oktober': namabulan=10; break;
+    case 'november': namabulan=11; break;
+    case 'desember': namabulan=12; break;
+    default: namabulan='salah input bulan'; break;
+END SWITCH
+IF typeof 'gajipokok' tidak sama dengan 'number' THEN :
+	tuliskan 'salah input data gajiPokok'
+ELSE IF typeof 'tunjangan' tidak sama dengan 'number' THEN :
+	tuliskan 'salah input data tunjangan'
+ELSE IF typeof 'jkk' tidak sama dengan 'boolean' THEN :
+	tuliskan 'salah input data jaminan kecelakaan kerja'
+ELSE IF typeof 'jk' tidak sama dengan 'boolean' THEN :
+	tuliskan 'salah input data jaminan kematian'
+ELSE IF total array dari 'ArrMasuk' lebih besar dari 2 THEN :
+	tuliskan 'salah input data bulanTahunMasuk'
+ELSE IF 'namabulan' sama dengan 'salah input bulan' THEN :
+	tuliskan 'salah input bulan di bulanTahunMasuk'
+ELSE IF 'yearMasuk' sama dengan 'yearNow' dan 'namabulan' lebih besar dari 'monthNow' THEN :
+	tuliskan 'salah input bulan, masa belom masuk kerja udah minta PPH21'
+ELSE IF 'yearMasuk' lebih besar dari 'yearNow' THEN :
+	tuliskan 'salah input bulanTahunMasuk, masa belom masuk kerja udah minta PPH21'
+ELSE
+	IF jkk sama dengan true THEN :
+		TULIS dan SIMPAN perhitungan 'jkk' dari 0.24 dibagi 100
+	ELSE
+		tulis 'jkk' sama dengan 0
+	END IF
+	IF 'jk' sama dengan true THEN :
+		TULIS dan SIMPAN perhitungan 'jk' dari 0.3 dibagi 100
+	ELSE
+		tulis 'jkk' sama dengan 0
+	END IF
+	IF 'yearNow' tidak sama dengan array ke 2 dari 'ArrMasuk' THEN :
+		TULIS dan SIMPAN perhitungan 'rangeMonth' dari 13 - 'namabulan'
+	ELSE IF 'yearNow' sama dengan array ke 2 dari 'ArrMasuk' THEN :
+		TULIS dan SIMPAN perhitungan 'rangeMonth' dari 12
+	END IF
+
+	TULIS dan SIMPAN 'jkk' menggunakan FUNCTION 'ceil' dengan parameter 'gajiPokok' dan 'jkk'
+	TULIS dan SIMPAN 'jk' menggunakan FUNCTION 'ceil' dengan parameter 'gajiPokok' dan 'jk'
+	HITUNG 'bruto' dari 'gajiPokok' ditambah 'tunjangan' ditambah 'jkk' ditambah 'jk'
+	TULIS dan SIMPAN 'bj' menggunakan FUNCTION 'ceil' dengan parameter 'bruto' dan '5 dibagi 100'
+	TULIS dan SIMPAN 'jht' menggunakan FUNCTION 'ceil' dengan parameter 'gajiPokok' dan '2 dibagi 100'
+	TULIS dan SIMPAN 'jp' menggunakan FUNCTION 'ceil' dengan parameter 'gajiPokok' dan '1 dibagi 100'
+	HITUNG 'neto' dari 'bruto' dikurang 'bj' dikurang 'jht' dikurang 'jp'
+	HITUNG 'netoTahun' dari 'rangeMonth' dikali 'neto'
+	TULIS dan SIMPAN 'ptkp' sama dengan '54000000'
+	HITUNG 'pkps' dari 'netoTahun' dikurang 'ptkp'
+	IF 'pkps' lebih kecil daripada 0 THEN:
+		TULIS dan SIMPAN 'pkps' sama dengan 0
+	END IF
+	HITUNG 'pembulatan' dari 'pkps' modulus 1000
+	HITUNG 'pembulatan' dari 'pkps' dikurang 'pembulatan'
+	IF 'pembulatan' lebih kecil dari 50000000 THEN:
+		HITUNG 'pph' dari 5 dibagi 100
+	ELSE IF 'pembulatan' lebih besar atau sama dengan 50000000 dan 'pembulatan' lebih kecil dari 250000000 THEN:
+		HITUNG 'pph' dari 15 dibagi 100
+	ELSE IF 'pembulatan' lebih besar atau sama dengan 250000000 dan 'pembulatan' lebih kecil dari 500000000 THEN:
+		HITUNG 'pph' dari 25 dibagi 100
+	ELSE IF 'pembulatan' lebih besar atau sama dengan 500000000 THEN:
+		HITUNG 'pph' dari 30 dibagi 100
+	ELSE IF 'pembulatan' sama dengan 0 THEN:
+		TULIS dan SIMPAN 'pph' sama dengan 0
+	END IF
+	HITUNG 'pphCount' dari 'pph' dikali 'pembulatan'
+	HITUNG 'pphMonth' dari metode Math.ceil dengan parameter 'pphCount' dibagi 'rangeMonth'
+
+	TULIS dan SIMPAN array 'monthNames' dengan isi "January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"
+	TULIS dan SIMPAN array 'judul' dengan isi [
+    "Gaji Pokok : ",
+    "Tunjangan : ",
+    "Jaminan Kecelakaan kerja : ",
+    "Jaminan Kematian : ",
+    "Biaya Jabatan; ",
+    "Iuran Jaminan Hari tua : ",
+    "Jaminan Pensiun : ",
+    "Penghasilan Bersih sebulan : ",
+    "Penghasilan kena pajak setahun : ",
+    "PPH Pasal 21 Bulan " tambahkan metode getMonth dengan paramater variable 'today' dengan array 'monthNames' " adalah "]
+    TULIS dan SIMPAN array 'hasil' dengan isi variable dari[
+    'gajiPokok', 'tunjangan', 'jkk', 'jk', 'bj', 'jht', 'jp', 'neto', 'pphCount', 'pphMonth']
+    FOR setiap pertambahan 1 pada 'i' dari 1 sampai jumlah data pada array 'judul' 
+    TULIS dan SIMPAN "array 'judul' ke-i dan FUNGSI dari currencyIDR dengan parameter array 'hasil' ke-i"
+ END IF 
